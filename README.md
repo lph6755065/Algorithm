@@ -304,4 +304,210 @@ quickSort(A, 0,A.size()-1);
 
 * 希尔排序的思想是采用插入排序的方法，先让数组中任意间隔为 h 的元素有序，刚开始 h 的大小可以是 h = n / 2,接着让 h = n / 4，让 h 一直缩小，当 h = 1 时，也就是此时数组中任意间隔为1的元素有序，此时的数组就是有序的了。
 ![](https://camo.githubusercontent.com/31d8a24e2c69ce0f9e90c0889a919e90b2707552def7d3b767723640dea347d3/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f666f7274686573706164612f6d65646961496d6167653240342e332f3230323130352f3131313131312e676966)
-![]()
+![](https://github.com/lph6755065/Algorithm/blob/main/picture/1632741128(1).jpg)
+> 算法思想
+
+1、把长度为n的输入序列分成两个长度为n/2的子序列；
+
+2、对这两个子序列分别采用归并排序；
+
+3、 将两个排序好的子序列合并成一个最终的排序序列。
+
+**1、// 归并排序（C++-迭代版）** 
+```cpp
+template<typename T>
+void merge_sort(T arr[], int len) {
+	T* a = arr;
+	T* b = new T[len];
+	for (int seg = 1; seg < len; seg += seg) {
+		for (int start = 0; start < len; start += seg + seg) {
+			int low = start, mid = min(start + seg, len), high = min(start + seg + seg, len);
+			cout << low << " " << mid << " " << high << endl;
+			int k = low;
+			int start1 = low, end1 = mid;
+			int start2 = mid, end2 = high;
+			while (start1 < end1 && start2 < end2)
+				b[k++] = a[start1] < a[start2] ? a[start1++] : a[start2++];
+			while (start1 < end1)
+				b[k++] = a[start1++];
+			while (start2 < end2)
+				b[k++] = a[start2++];
+		}
+
+		swap(a, b); //交换a b 地址
+        //T* temp = a;
+        //  a = b;
+        //  b = temp;
+
+	}
+
+	//if (a != arr) {
+	//	for (int i = 0; i < len; i++)
+	//		b[i] = a[i];
+	//	b = a;
+	//}
+       
+    /*
+    十分严谨的一种安排
+    每次排序都要交换 a、b 值（数组首地址）
+1、if(a != arr)：如果排序结束后，a 值为原来数组 b 首地址，此时 arr 与 b 相同，arr 数组内容不是最终的结果，
+2、循环内容：把 a数组内容复制到数组 b（数组arr）
+3、b = a ：循环结束后，让 b 指向它原来的数组首地址，以便 delete[]
+    
+    */
+	delete[] b;
+}
+
+```
+**2、// 归并排序（C++-递归版）**
+```cpp
+template<typename T>
+void merge_sort_recursive(T arr[], T reg[], int start, int end) {
+    if (start >= end)
+        return;
+    int len = end - start, mid = (len >> 1) + start;
+    int start1 = start, end1 = mid;
+    int start2 = mid + 1, end2 = end;
+    merge_sort_recursive(arr, reg, start1, end1);
+    merge_sort_recursive(arr, reg, start2, end2);
+    int k = start;
+    while (start1 <= end1 && start2 <= end2)
+        reg[k++] = arr[start1] < arr[start2] ? arr[start1++] : arr[start2++];
+    while (start1 <= end1)
+        reg[k++] = arr[start1++];
+    while (start2 <= end2)
+        reg[k++] = arr[start2++];
+    for (k = start; k <= end; k++)
+        arr[k] = reg[k];
+}
+
+// merge_sort
+template<typename T>
+void merge_sort(T arr[], const int len) {
+    T reg[len];
+    merge_sort_recursive(arr, reg, 0, len - 1);
+}
+
+```
+**3、vector 类型的递归 ，就记这一种** 
+```cpp
+void mergeSortCore(vector<int>& data, vector<int>& dataTemp, int low, int high) {
+
+	if (low >= high) return;
+	int len = high - low, mid = low + len / 2;
+	int start1 = low, end1 = mid, start2 = mid + 1, end2 = high;
+	mergeSortCore(data, dataTemp, start1, end1);
+	mergeSortCore(data, dataTemp, start2, end2);
+	int index = low;
+	while (start1 <= end1 && start2 <= end2) {
+		dataTemp[index++] = data[start1] < data[start2] ? data[start1++] : data[start2++];
+	}
+
+	while (start1 <= end1) {
+		dataTemp[index++] = data[start1++];
+	}
+
+
+	while (start2 <= end2) {
+		dataTemp[index++] = data[start2++];
+	}
+
+	for (index = low; index <= high; ++index) {
+		data[index] = dataTemp[index];
+	}
+}
+
+
+void mergeSort(vector<int>& data) {
+	int len = data.size();
+	vector<int> dataTemp(len, 0);
+	mergeSortCore(data, dataTemp, 0, len - 1);
+}
+
+```  
+**节约时间的一种递归归并排序**
+```cpp
+void mergeSortCore(vector<int>& nums, vector<int>& copy, int begin, int end) {
+	if (begin >= end) return;
+	int mid = begin + (end - begin) / 2;
+	int low1 = begin, high1 = mid, low2 = mid + 1, high2 = end;
+	mergeSortCore(copy, nums, low1, high1);//这里减少了copy向nums的赋值部分，千万注意不要把copy 和 nums赋值反了
+	mergeSortCore(copy, nums, low2, high2);
+
+	int copyIndex = low1;
+	while (low1 <= high1 && low2 <= high2) {
+		copy[copyIndex++] = nums[low1] < nums[low2] ? nums[low1++] : nums[low2++];
+	}
+	while (low1 <= high1) {
+		copy[copyIndex++] = nums[low1++];
+	}
+	while (low2 <= high2) {
+		copy[copyIndex++] = nums[low2++];
+	}
+
+	cout << begin << " " << end << endl;
+	for (auto a : copy) {
+		cout << a << " ";
+	}
+	cout << endl;
+
+}
+
+void mergeSort(vector<int> nums) {
+
+	for (auto a : nums) {
+		cout << a << " ";
+	}
+	cout << endl;
+	
+	
+	vector<int> copyNums(nums);//这里要借助一个一模一样的数组的
+	mergeSortCore(nums, copyNums, 0, nums.size() - 1);
+	nums.assign(copyNums.begin(), copyNums.end());//到最后copy数组是排序好的，记得要赋值一下
+		
+	for (auto a : nums) {
+		cout << a << " ";
+	}
+}
+
+``` 
+**稍微完整版** 
+```cpp
+void print(vector<int>& nums) {
+	for (auto a : nums)
+		cout << a << " ";
+	cout << endl;
+
+}
+
+void mergeSort(vector<int>& data, vector<int>&temp,int begin,int end) {
+	if (begin >= end) return;
+	int low1 = begin, high2 = end, mid = begin + (end - begin) / 2;
+	int high1 = mid, low2 = mid + 1;
+	print(data);
+	mergeSort(temp, data, low1, high1);
+	mergeSort(temp, data, low2, high2);
+	int index = low1;
+	while (low1 <= high1 && low2 <= high2) {
+		temp[index++] = data[low1] < data[low2] ? data[low1++] : data[low2++];
+	}
+	while (low1 <= high1) {
+		temp[index++] = data[low1++];
+	}
+
+	while (low2 <= high2) {
+		temp[index++] = data[low2++];
+	}
+
+}
+
+void main(){
+    
+    
+    vector<int> nums = { 5,3,5,6,1,4,9,10,6,2};
+	vector<int> temp(nums);
+	mergeSort(nums,temp , 0, nums.size() - 1);
+    nums.assign(temp.begin(),temp.end());
+}
+
+```
