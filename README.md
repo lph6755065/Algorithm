@@ -555,6 +555,72 @@ void main(){
 
 ```
 ## 堆排序
+> 首先堆heap是一种数据结构，是一棵完全二叉树且满足性质：所有非叶子结点的值均不大于或均不小于其左、右孩子结点的值.
+
+堆排序思想
+堆排序的基本思想是利用heap这种数据结构(可看成一个完全二叉树)，使在排序中比较的次数明显减少。
+
+堆排序的时间复杂度为O(n*log(n))， 非稳定排序，原地排序(空间复杂度O(1))。
+
+堆排序的关键在于建堆和调整堆，下面简单介绍一下建堆的过程：
+
+第1趟将索引0至n-1处的全部数据建大顶(或小顶)堆，就可以选出这组数据的最大值(或最小值)。将该堆的根节点与这组数据的最后一个节点交换，就使的这组数据中最大(最小)值排在了最后。
+
+第2趟将索引0至n-2处的全部数据建大顶(或小顶)堆，就可以选出这组数据的最大值(或最小值)。将该堆的根节点与这组数据的倒数第二个节点交换，就使的这组数据中最大(最小)值排在了倒数第2位。
+
+…
+
+第k趟将索引0至n-k处的全部数据建大顶(或小顶)堆，就可以选出这组数据的最大值(或最小值)。将该堆的根节点与这组数据的倒数第k个节点交换，就使的这组数据中最大(最小)值排在了倒数第k位。
+
+其实整个堆排序过程中, 我们只需重复做两件事：
+
+建堆(初始化+调整堆, 时间复杂度为O(n));
+
+拿堆的根节点和最后一个节点交换(siftdown, 时间复杂度为O(n*log n) ).
+
+因而堆排序整体的时间复杂度为O(n*log n).
+
+**注意代码**
+```cpp
+void heapify(vector<int>& nums, int n, int i)//对有一定顺序的堆，
+//当前第i个结点取根左右的最大值（这个操作称heapfiy）
+{
+	int l = i * 2 + 1, r = i * 2 + 2;
+	int max = i;
+	if (l<n && nums[l]>nums[max])
+		max = l;
+	if (r<n && nums[r]>nums[max])
+		max = r;
+	if (max != i)
+	{
+		swap(nums[max], nums[i]);
+		heapify(nums, n, max);
+	}
+}
+void heapify_build(vector<int>& nums, int n)//建立大根堆，从树的倒数第二层第一个结点开始，
+//对每个结点进行heapify操作，然后向上走
+{
+	int temp = (n - 2) / 2;
+	for (int i = temp; i >= 0; i--)
+		heapify(nums, n, i);
+
+	for (int i = 0; i < nums.size(); i++)
+		cout << nums[i] << " ";
+	cout << endl;
+}
+void heapify_sort(vector<int>& nums, int n)//建立大根堆之后，每次交换最后一个结点和根节点（最大值），
+//对交换后的根节点继续进行heapify（此时堆的最后一位是最大值，因此不用管他，n变为n-1）
+{
+	heapify_build(nums, n);
+	for (int i = 0; i < n; i++)
+	{
+		swap(nums.front(), nums[n - i - 1]);
+		heapify(nums, n - i - 1, 0);
+	}
+}
+
+```
+
 ```cpp
 #include<cstdio>
 #include<iostream>
