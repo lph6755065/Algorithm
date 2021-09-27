@@ -554,3 +554,197 @@ void main(){
 }
 
 ```
+## 堆排序
+```cpp
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+void adjust(int arr[], int len, int index)
+{
+    int left = 2*index + 1;
+    int right = 2*index + 2;
+    int maxIdx = index;
+    if(left<len && arr[left] > arr[maxIdx]) maxIdx = left;
+    if(right<len && arr[right] > arr[maxIdx]) maxIdx = right;  // maxIdx是3个数中最大数的下标
+    if(maxIdx != index)                 // 如果maxIdx的值有更新
+    {
+        swap(arr[maxIdx], arr[index]);
+        adjust(arr, len, maxIdx);       // 递归调整其他不满足堆性质的部分
+    }
+
+}
+void heapSort(int arr[], int size)
+{
+    for(int i=size/2 - 1; i >= 0; i--)  // 对每一个非叶结点进行堆调整(从最后一个非叶结点开始)
+    {
+        adjust(arr, size, i);
+    }
+    for(int i = size - 1; i >= 1; i--)
+    {
+        swap(arr[0], arr[i]);           // 将当前最大的放置到数组末尾
+        adjust(arr, i, 0);              // 将未完成排序的部分继续进行堆排序
+    }
+}
+
+int main()
+{
+    int array[8] = {8, 1, 14, 3, 21, 5, 7, 10};
+    heapSort(array, 8);
+    for(auto it: array)
+    {
+        cout<<it<<endl;
+    }
+    return 0;
+}
+```
+**C语言版**
+```cpp
+#include <stdio.h>
+
+void display(int array[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+}
+
+void swap(int array[], int x, int y) {
+    int key  = array[x];
+    array[x] = array[y];
+    array[y] = key;
+}
+
+// 从大到小排序
+// void Down(int array[], int i, int n) {
+//     int child = 2 * i + 1;
+//     int key   = array[i];
+//     while (child < n) {
+//         if (child + 1 < n && array[child] > array[child + 1]) {
+//             child++;
+//         }
+//         if (key > array[child]) {
+//             swap(array, i, child);
+//             i = child;
+//         } else {
+//             break;
+//         }
+//         child = child * 2 + 1;
+//     }
+// }
+
+// 从小到大排序
+void Down(int array[], int i, int n) { // 最后结果就是大顶堆
+    int parent = i;                    // 父节点下标
+    int child  = 2 * i + 1;            // 子节点下标
+    while (child < n) {
+        if (child + 1 < n && array[child] < array[child + 1]) { // 判断子节点那个大，大的与父节点比较
+            child++;
+        }
+        if (array[parent] < array[child]) { // 判断父节点是否小于子节点
+            swap(array, parent, child);     // 交换父节点和子节点
+            parent = child;                 // 子节点下标 赋给 父节点下标
+        }
+        child = child * 2 + 1; // 换行，比较下面的父节点和子节点
+    }
+}
+
+void BuildHeap(int array[], int size) {
+    for (int i = size / 2 - 1; i >= 0; i--) { // 倒数第二排开始, 创建大顶堆，必须从下往上比较
+        Down(array, i, size);                 // 否则有的不符合大顶堆定义
+    }
+}
+
+void HeapSort(int array[], int size) {
+    printf("初始化数组：");
+    BuildHeap(array, size); // 初始化堆
+    display(array, size);   // 查看初始化结果
+    for (int i = size - 1; i > 0; i--) {
+        swap(array, 0, i); // 交换顶点和第 i 个数据
+                           // 因为只有array[0]改变，其它都符合大顶堆的定义，所以可以从上往下重新建立
+        Down(array, 0, i); // 重新建立大顶堆
+
+        printf("排序的数组：");
+        display(array, size);
+    }
+}
+
+int main() {
+    int array[] = {49, 38, 65, 97, 76, 13, 27, 49, 10};
+    int size    = sizeof(array) / sizeof(int);
+
+    // 打印数据
+    printf("%d \n", size);
+    printf("排序前数组：");
+    display(array, size);
+    HeapSort(array, size);
+
+    return 0;
+}
+
+```
+**可重载比较函数的写法: 参考来源：https://enjoy233.blog.csdn.net/article/details/52853194?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link
+```cpp
+#include<memory.h>
+#include<stdio.h>
+#include<stdlib.h>
+void swap(void* x, void* y, size_t sz) {
+    void* t = malloc(sz);
+    memcpy(t, x, sz);
+    memcpy(x, y, sz);
+    memcpy(y, t, sz);
+    free(t);
+}
+void makeHeap(void* x, int i, int n, size_t sz, int(*cmp)(const void*, const void*)) {
+    char* y = (char*)x;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+    int m;
+    if (l<n && (*cmp)(y + l*sz, y + i*sz)>0) m = l;
+    else m = i;
+    if (r<n && (*cmp)(y + r*sz, y + m*sz)>0) m = r;
+    if (m != i){
+        swap(y + i*sz, y + m*sz, sz);
+        makeHeap(x, m, n, sz, cmp);
+    }
+}
+void buildHeap(void* x, int n, size_t sz, int(*cmp)(const void*, const void*)) {
+    for (int i = n / 2 - 1; i >= 0; i--) makeHeap(x, i, n, sz, cmp);
+}
+void heapSort(void* x, int n, size_t sz, int(*cmp)(const void*, const void*)) {
+    buildHeap(x, n, sz, cmp);
+    char* y = (char*)x;
+    for (int i = n - 1; i >= 1; i--){
+        swap(y, y + i*sz, sz);
+        makeHeap(x, 0, --n, sz, cmp);
+    }
+}
+
+void p(int* x,int n){
+    for (int k = 0; k < n; k++){
+        printf("%d ", x[k]);
+    }
+    printf("\n");
+}
+
+int less(const void* a, const void* b){
+    return *((int*)a) < *((int*)b);
+}
+int greater(const void* a, const void* b){
+    return *((int*)a) > *((int*)b);
+}
+int main(){
+    int x[] = { 2, 3, 4, 6, 8, 2, 9, 0 };
+    // 降序全排列
+    heapSort(x, 8, sizeof(int), less);
+    p(x, 8);
+    // 升序全排列
+    heapSort(x, 8, sizeof(int), greater);
+    p(x, 8);
+    // 最大的4个元素，在数组末尾
+    heapSort(x, 4, sizeof(int), less);
+    p(x, 8);
+}
+```
