@@ -635,6 +635,9 @@ void adjust(int arr[], int len, int index)
     int maxIdx = index;
     if(left<len && arr[left] > arr[maxIdx]) maxIdx = left;
     if(right<len && arr[right] > arr[maxIdx]) maxIdx = right;  // maxIdx是3个数中最大数的下标
+    //如果是降序排列的话，可以直接在这里改下每次所比较的大小就好
+    //if(left<len && arr[left] < arr[maxIdx]) maxIdx = left;
+    //if(right<len && arr[right] < arr[maxIdx]) maxIdx = right;  // maxIdx是3个数中最大数的下标
     if(maxIdx != index)                 // 如果maxIdx的值有更新
     {
         swap(arr[maxIdx], arr[index]);
@@ -648,7 +651,7 @@ void heapSort(int arr[], int size)
     {
         adjust(arr, size, i);
     }
-    for(int i = size - 1; i >= 1; i--)
+    for(int i = size - 1; i >= 1; i--) //这里也可以i >= 0;不过剩最后一个元素没必要再排序了，多此一举。
     {
         swap(arr[0], arr[i]);           // 将当前最大的放置到数组末尾
         adjust(arr, i, 0);              // 将未完成排序的部分继续进行堆排序
