@@ -305,6 +305,40 @@ quickSort(A, 0,A.size()-1);
 * 希尔排序的思想是采用插入排序的方法，先让数组中任意间隔为 h 的元素有序，刚开始 h 的大小可以是 h = n / 2,接着让 h = n / 4，让 h 一直缩小，当 h = 1 时，也就是此时数组中任意间隔为1的元素有序，此时的数组就是有序的了。
 ![](https://camo.githubusercontent.com/31d8a24e2c69ce0f9e90c0889a919e90b2707552def7d3b767723640dea347d3/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f666f7274686573706164612f6d65646961496d6167653240342e332f3230323130352f3131313131312e676966)
 ![](https://github.com/lph6755065/Algorithm/blob/main/picture/1632741128(1).jpg)
+
+优质的文章讲解：https://mp.weixin.qq.com/s/4kJdzLB7qO1sES2FEW0Low
+**C++代码实现**
+```cpp
+void shellSortCore(vector<int>& nums, int gap, int i) {
+	int inserted = nums[i];
+	int j;
+    //  插入的时候按组进行插入
+	for (j = i - gap; j >= 0 && inserted < nums[j]; j -= gap) {
+		nums[j + gap] = nums[j];
+	}
+	nums[j + gap] = inserted;
+}
+
+void shellSort(vector<int>& nums) {
+	int len = nums.size();
+    //进行分组，最开始的时候，gap为数组长度一半
+	for (int gap = len / 2; gap > 0; gap /= 2) {
+        //对各个分组进行插入分组
+		for (int i = gap; i < len; ++i) {
+            //将nums[i]插入到所在分组正确的位置上
+			shellSortCore(nums,gap,i);
+		}
+	}
+
+	for (auto a : nums) {
+		cout << a << "";
+	}
+
+}
+```
+## 6、归并排序
+> 将一个大的无序数组有序，我们可以把大的数组分成两个，然后对这两个数组分别进行排序，之后在把这两个数组合并成一个有序的数组。由于两个小的数组都是有序的，所以在合并的时候是很快的。
+通过递归的方式将大的数组一直分割，直到数组的大小为 1，此时只有一个元素，那么该数组就是有序的了，之后再把两个数组大小为1的合并成一个大小为2的，再把两个大小为2的合并成4的 … 直到全部小的数组合并起来。
 > 算法思想
 
 1、把长度为n的输入序列分成两个长度为n/2的子序列；
@@ -312,6 +346,8 @@ quickSort(A, 0,A.size()-1);
 2、对这两个子序列分别采用归并排序；
 
 3、 将两个排序好的子序列合并成一个最终的排序序列。
+
+> 归并排序是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。将已有序的子序列合并，得到完全有序的序列；即先使每个子序列有序，再使子序列段间有序。若将两个有序表合并成一个有序表，称为2-路归并。
 
 **1、// 归并排序（C++-迭代版）** 
 ```cpp
