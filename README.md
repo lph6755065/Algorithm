@@ -304,8 +304,11 @@ quickSort(A, 0,A.size()-1);
 
 * 希尔排序的思想是采用插入排序的方法，先让数组中任意间隔为 h 的元素有序，刚开始 h 的大小可以是 h = n / 2,接着让 h = n / 4，让 h 一直缩小，当 h = 1 时，也就是此时数组中任意间隔为1的元素有序，此时的数组就是有序的了。
 
-![](https://camo.githubusercontent.com/31d8a24e2c69ce0f9e90c0889a919e90b2707552def7d3b767723640dea347d3/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f666f7274686573706164612f6d65646961496d6167653240342e332f3230323130352f3131313131312e676966)
-优质的文章讲解：https://mp.weixin.qq.com/s/4kJdzLB7qO1sES2FEW0Low
+![](https://camo.githubusercontent.com/31d8a24e2c69ce0f9e90c0889a919e90b2707552def7d3b767723640dea347d3/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f666f7274686573706164612f6d65646961496d6167653240342e332f3230323130352f3131313131312e676966)  
+
+>优质的文章讲解：https://mp.weixin.qq.com/s/4kJdzLB7qO1sES2FEW0Low
+
+
 **C++代码实现**
 ```cpp
 void shellSortCore(vector<int>& nums, int gap, int i) {
