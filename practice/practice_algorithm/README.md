@@ -135,4 +135,48 @@ void replaceSpace(char *str,int length) {
         }
     }
 
+```  
+### No3、从尾到头打印链表
+
+[牛客网原题链接](https://www.nowcoder.com/practice/d0267f7f55b3412ba93bd35cfa8e8035?tpId=13&&tqId=11156&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking) 
+
+**题目描述  
+
+输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
+
+**方法一：先让到容器里 再反转出来
+```cpp
+class Solution {
+public:
+    vector<int> printListFromTailToHead(ListNode* head) {
+        if (head == nullptr) return vector<int>();
+        vector<int> result;
+        while (head){
+            result.push_back(head->val);
+            head = head -> next;
+        }
+       reverse(result.begin(), result.end());
+        return result;
+    }
+};
+```  
+**方法二：返回时，直接用快捷方式
+```cpp
+class Solution {
+public:
+    vector<int> printListFromTailToHead(ListNode* head) {
+        if (head == nullptr) return vector<int>();
+        vector<int> result;
+        while (head){
+            result.push_back(head->val);
+            head = head -> next;
+        }
+       //reverse(result.begin(), result.end());
+        return vector<int> (result.rbegin(),result.rend());
+    }
+};
+```
+**方法三：迭代法
+```cpp
+
 ```
