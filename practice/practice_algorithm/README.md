@@ -178,5 +178,123 @@ public:
 ```
 **方法三：迭代法**  
 ```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* temp; // 保存cur的下一个节点
+        ListNode* cur = head;
+        ListNode* pre = NULL;
+        while(cur) {
+            temp = cur->next;  // 保存一下 cur的下一个节点，因为接下来要改变cur->next
+            cur->next = pre; // 翻转操作
+            // 更新pre 和 cur指针
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+};
 
+```
+**方法四：递归法**
+```cpp
+class Solution {
+public:
+    ListNode* reverse(ListNode* pre,ListNode* cur){
+        if(cur == NULL) return pre;
+        ListNode* temp = cur->next;
+        cur->next = pre;
+        // 可以和双指针法的代码进行对比，如下递归的写法，其实就是做了这两步
+        // pre = cur;
+        // cur = temp;
+        return reverse(cur,temp);
+    }
+    ListNode* reverseList(ListNode* head) {
+        // 和双指针法初始化是一样的逻辑
+        // ListNode* cur = head;
+        // ListNode* pre = NULL;
+        return reverse(NULL, head);
+    }
+
+};
+
+```
+```cpp
+// Recursive C++ program to reverse 
+// a linked list 
+#include <iostream> 
+using namespace std; 
+
+/* Link list node */
+struct Node { 
+    int data; 
+    struct Node* next; 
+    Node(int data) 
+    { 
+        this->data = data; 
+        next = NULL; 
+    } 
+}; 
+
+struct LinkedList { 
+    Node* head; 
+    LinkedList() 
+    { 
+        head = NULL; 
+    } 
+
+    Node* reverse(Node* head) 
+    { 
+        if (head == NULL || head->next == NULL) 
+            return head; 
+
+        /* reverse the rest list and put  
+          the first element at the end */
+        Node* rest = reverse(head->next); 
+        head->next->next = head; 
+
+        /* tricky step -- see the diagram */
+        head->next = NULL; 
+
+        /* fix the head pointer */
+        return rest; 
+    } 
+
+    /* Function to print linked list */
+    void print() 
+    { 
+        struct Node* temp = head; 
+        while (temp != NULL) { 
+            cout << temp->data << " "; 
+            temp = temp->next; 
+        } 
+    } 
+
+    void push(int data) 
+    { 
+        Node* temp = new Node(data); 
+        temp->next = head; 
+        head = temp; 
+    } 
+}; 
+
+/* Driver program to test above function*/
+int main() 
+{ 
+    /* Start with the empty list */
+    LinkedList ll; 
+    ll.push(20); 
+    ll.push(4); 
+    ll.push(15); 
+    ll.push(85); 
+
+    cout << "Given linked list\n"; 
+    ll.print(); 
+
+    ll.head = ll.reverse(ll.head); 
+
+    cout << "\nReversed Linked list \n"; 
+    ll.print(); 
+    return 0; 
+} 
 ```
