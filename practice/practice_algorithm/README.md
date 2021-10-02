@@ -93,3 +93,46 @@ bool findNumberIn2DArray(vector<vector<int>>& matrix, int target) {
 }
 
 ```
+### No2、替换空格
+
+[牛客网原题链接](https://www.nowcoder.com/practice/4060ac7e3e404ad1a894ef3e17650423?tpId=13&&tqId=11155&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+### 题目描述
+
+请实现一个函数，将一个字符串中的每个空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。
+### 第一种方法：先转为string,然后处理完成后再转为`char *`。但不是以返回值的形式，还要利用好原来的空间，用strcpy实现之。
+```cpp
+void replaceSpace(char *str,int length) {
+        string res,s = str;
+        for(char x: s){
+            if (x == ' ') res += "%20";
+            else res +=x;
+        }
+        strcpy(str,res.c_str());
+}
+```
+### 第二种方法：双指针
+```cpp
+ void replaceSpace(char* str, int length) {
+        if(str == NULL || length <0)
+            return;
+        int num =0;    //空格数目
+        for (int i = 0; i < length; i++){
+            if (str[i] == ' ')
+                num++;
+        }
+        char* p1 = &str[length -1];//原字符串指针
+        char* p2 = &str[length -1 +num*2];//新字符串指针
+        for (int i = length-1; i >= 0; i--) {
+            if (str[i] == ' ') {
+                *p2-- = '0';
+                *p2-- = '2';
+                *p2-- = '%';
+                p1--;
+            }else{
+                *p2-- = *p1--;
+            }
+        }
+    }
+
+```
