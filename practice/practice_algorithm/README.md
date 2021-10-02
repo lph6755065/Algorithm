@@ -297,4 +297,46 @@ int main()
     ll.print(); 
     return 0; 
 } 
+``` 
+### No4、重建二叉树
+> 首先, 了解find()函数的用法
+
+find函数用于查找数组中的某一个指定元素的位置。
+
+比如：有一个数组[0, 0, 5, 4, 4]；
+问：元素5的在什么位置，find函数 返回值 为 2；
+
+find （数组名 + 起始查找元素的位置， 数组名 + 结束查找的元素位置， 想要查找的元素）
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>//注意要包含该头文件
+using namespace std;
+int main()
+{
+    int nums[] = { 3, 1, 4, 1, 5, 9 };
+    int num_to_find = 5;
+    int start = 0;
+    int end = 5;
+    int* result = find( nums + start, nums + end, num_to_find );
+    if( result == nums + end ) 
+    {
+        cout<< "Did not find any number matching " << num_to_find << endl;
+    } 
+    else
+    {
+         cout<< "Found a matching number: " << *result << endl;
+    }
+    return 0;
+}
+
+
 ```
+[](https://www.nowcoder.com/practice/8a19cbe657394eeaac2f6ea9b0f6fcf6?tpId=13&&tqId=11157&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+> 题目描述
+
+好题 绝对的好题
+
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+
+
