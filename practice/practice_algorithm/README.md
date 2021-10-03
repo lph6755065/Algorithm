@@ -332,11 +332,245 @@ int main()
 
 
 ```
-[](https://www.nowcoder.com/practice/8a19cbe657394eeaac2f6ea9b0f6fcf6?tpId=13&&tqId=11157&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+[重建二叉树](https://www.nowcoder.com/practice/8a19cbe657394eeaac2f6ea9b0f6fcf6?tpId=13&&tqId=11157&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 > 题目描述
 
 好题 绝对的好题
 
 输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
 
+```cpp
+class Solution
+{
+public:
+    void push(int node) {
+        stack1.push(node);
+    }
 
+    int pop() {
+       if(!stack2.empty()){
+           int value = stack2.top();
+           stack2.pop();
+           return value;
+       }else{
+           while(!stack1.empty()){
+               stack2.push(stack1.top());
+               stack1.pop();
+           }
+           int res = stack2.top();
+           stack2.pop();
+           return res;
+       }
+        
+    }
+
+private:
+    stack<int> stack1;
+    stack<int> stack2;
+};
+```
+### 06旋转数组
+
+[旋转数组](https://www.nowcoder.com/practice/9f3231a991af4f55b95579b44b7a01ba?tpId=13&&tqId=11159&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+>题目描述
+
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。
+
+输入一个非递减排序的数组的一个旋转，输出旋转数组的最小元素。例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。
+
+NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。
+
+**方法一：二分法Log(N)时间复杂度**
+
+```cpp
+class Solution {
+public:
+    int minNumberInRotateArray(vector<int> rotateArray) {
+        if(rotateArray.empty()) return 0;
+        
+        int low = 0;
+        int high = rotateArray.size() - 1;
+        int mid = 0;
+        
+        while (low < high){
+            mid = low + (high - low)/2;
+            if(rotateArray[low] < rotateArray[high]) return rotateArray[low];
+            if (rotateArray[mid] > rotateArray[low]) low = mid;
+            else if(rotateArray[mid] < rotateArray[high]) high = mid;
+            else{
+                low++;
+            }
+        }
+        return rotateArray[low];
+    }
+};
+```  
+**常规法:是O(n)时间复杂度**
+```cpp
+ int minNumberInRotateArray(vector<int> rotateArray) {
+    if (rotateArray.size() == 0) return 0;
+    int minNum = rotateArray[0], len = rotateArray.size();
+    for (int i = 1; i < len; ++i) {
+        if (rotateArray[i] < minNum) return rotateArray[i];
+    }
+    return minNum;
+    }
+```
+```cpp
+    int minNumberInRotateArray(vector<int> rotateArray) {
+    if (rotateArray.size() == 0) return 0;
+    int  len = rotateArray.size();
+    for (int i = 0; i < len-1; ++i) {
+        if (rotateArray[i] > rotateArray[i+1]) return rotateArray[i+1];
+    }
+    return rotateArray[0]; //走到这一步了，就说明整个数组都是递增或者都是非递减的
+    }
+
+```  
+### No7、斐波那契数列  
+[斐波那契数列](https://www.nowcoder.com/practice/c6c7742f5ba7442aada113136ddea0c3?tpId=13&&tqId=11160&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+>题目描述
+大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项（从0开始，第0项为0，第1项是1）。
+
+**方法一：迭代
+```cpp
+public class Solution {
+    public int Fibonacci(int n) {
+        if(n == 0){
+            return 0;
+        }else if(n == 1){
+            return 1;
+        }
+        int sum = 0;
+        int two = 0;
+        int one = 1;
+        for(int i=2;i<=n;i++){
+            sum = two + one;
+            two = one;
+            one = sum;
+        }
+        return sum;
+    }
+}
+// 时间复杂度：O(n)
+//空间复杂度：O(1)
+
+``` 
+
+**方法二：递归**  
+
+```cpp
+public class Solution {
+    public int Fibonacci(int n) {
+        if(n<=1){
+            return n;
+        }
+        return Fibonacci(n-1) + Fibonacci(n-2);
+    }
+}
+// 时间复杂度：O(n^2)
+//空间复杂度：O(1)
+```
+
+```cpp
+class Solution {
+public:
+    int Fibonacci(int n) {
+        int ans[40];
+        ans[0] = 0;
+        ans[1] = 1;
+        for ( int i = 2; i <= n; i++){
+            ans[i] = ans[i - 1] + ans[i -2];
+        }
+        return ans[n];
+    }
+};
+// 时间复杂度：O(n)
+//空间复杂度：O(n)
+```  
+### No8、 跳台阶
+[跳台阶](https://www.nowcoder.com/practice/8c82a5b80378478f9484d87d1c5f12a4?tpId=13&&tqId=11161&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+>题目描述
+>一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法（先后次序不同算不同的结果）。
+
+**递归**
+```cpp
+public class Solution {
+    public int JumpFloor(int n) {
+        if (n == 1) return 1; 
+        if (n == 2) return 2;
+        return JumpFloor(n - 1) + JumpFloor(n - 2);
+    }
+}
+O(n^2)
+```
+
+**迭代**
+```cpp
+class Solution {
+public:
+    int jumpFloor(int number) {
+     if(number <= 2) return number;
+        int a = 1,b = 2;
+        int c = 0;
+        for(int i = 3; i <= number; i++){
+         c = a + b;
+         a = b;
+         b = c;
+       
+        }
+        return c;
+    }
+};
+//时间复杂度为 O(n)。
+```
+**迭代优化版**
+
+```cpp
+class Solution {
+public:
+    int jumpFloor(int number) {
+     if(number <= 1) return 1;
+        int a = 1,b = 1, c= 0;
+        for(int i = 2; i <= number; i++){
+            a = a+b;//相当于C
+            b=a-b; //相当于 b = a
+       
+        }
+        return a;
+    }
+};
+```  
+### No9、变态跳台阶  
+[变态跳台阶](https://www.nowcoder.com/practice/22243d016f6b47f2a6928b4313c85387?tpId=13&&tqId=11162&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+> 题目描述
+一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶总共有多少种跳法。
+
+**1、递推公式**
+
+`因为n级台阶，第一步有n种跳法：跳1级、跳2级、到跳n级 跳1级，剩下n-1级，则剩下跳法是f(n-1) 跳2级，剩下n-2级，则剩下跳法是f(n-2) 所以f(n)=f(n-1)+f(n-2)+...+f(1) 因为f(n-1)=f(n-2)+f(n-3)+...+f(1) 所以f(n)=2*f(n-1)`  
+```cpp
+
+int jumpFloorII(int number) {
+
+    if(number==1) return 1;
+    return 2*jumpFloorII(number-1);
+}
+**2、第二种方法**
+```cpp
+    int jumpFloorII(int number) {
+
+        if(number==1) return 1;
+        int count=0,a=1;
+        for(int i=2;i<=number;++i){
+            count=a*2;
+            a=count;
+        }
+        return count;
+    }
+
+```
+### No10、矩阵覆盖  
+[矩阵覆盖 ](https://www.nowcoder.com/practice/72a5a919508a4251859fb2cfb987a0e6?tpId=13&&tqId=11163&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
