@@ -294,6 +294,77 @@ quickSort(A, 0,A.size()-1);
 	}
 ~~~
 
+**三数取中**
+```cpp
+class Solution {
+public:
+	
+    int midValue(vector<int>&nums , int left, int right)
+    {
+        int mid = left + (right-left)/2;
+        int ret = 0;
+        if(nums[left] > nums[mid])
+        {   
+            if(nums[mid] > nums[right])
+                return mid;
+            else
+            {
+                ret = (nums[left] > nums[right]) ? right : left;
+                return ret;
+            }
+        }
+        else
+        {
+            if(nums[right] > nums[mid])
+                return mid;
+            else
+            {
+                ret = ((nums[left] > nums[right]) ? right : left);
+                return ret;
+            }
+        }
+    }
+    void quickSort(vector<int>& nums, int left, int right)
+    {
+        if(left > right)
+            return ;
+        //取中位数
+        int mid = midValue(nums, left, right);
+        swap(nums[left], nums[mid]);
+        int begin = left;
+        int end = right;
+        int key = left;
+        while(left < right)
+        {
+            //从右往左找，找到一个比key小的值
+            while(left < right && nums[right] >= nums[key])
+            {
+                --right;
+            }
+            //从左往右找，找到一个比key大的值
+            while(left < right && nums[left] <= nums[key])
+            {
+                ++left;
+            }
+            //这里说明我们已经找到了两个需要交换的数字
+            swap(nums[left], nums[right]);
+        }
+        //这里说明交换完毕，这里我们需要将key值与right值进行交换
+        //为什么是right？ 因为每次right先开始找，所以我们能保证right一定是较小值
+        swap(nums[key], nums[right]);
+        //这里进入递归过程
+        quickSort(nums, begin, right-1);
+        quickSort(nums, right+1, end);
+    }
+    vector<int> sortArray(vector<int>& nums) {
+        quickSort(nums, 0, nums.size()-1);
+        return nums;
+    }
+};
+
+
+```
+
 <p id="希尔排序"></p>
 
 ## 5、希尔排序
