@@ -413,7 +413,7 @@ void shellSort(vector<int>& nums) {
 ```cpp
 void shellSort(vector<int> & nums) {
     int len = nums.size();
-    for (int gap = len /2 ; gap > 0; gap /= 2){
+    for (int gap = len /2 ; gap > 0; gap /= 2){ //gap >0 这里千万不能等于0 不然显示不了
         for (int i = gap; i < len; i++){
             int insert = nums[i];
             int j;
