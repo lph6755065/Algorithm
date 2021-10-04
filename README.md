@@ -408,6 +408,22 @@ void shellSort(vector<int>& nums) {
 	}
 
 }
+``` 
+**合并一起的**  
+```cpp
+void shellSort(vector<int> & nums) {
+    int len = nums.size();
+    for (int gap = len /2 ; gap > 0; gap /= 2){
+        for (int i = gap; i < len; i++){
+            int insert = nums[i];
+            int j;
+            for (j = i - gap; j >= 0 && insert < nums[j]; j -= gap){
+                nums[j + gap] = nums[j];
+            }
+            nums[j + gap] = insert;
+        }
+    }
+}
 ```
 ## 6、归并排序
 > 将一个大的无序数组有序，我们可以把大的数组分成两个，然后对这两个数组分别进行排序，之后在把这两个数组合并成一个有序的数组。由于两个小的数组都是有序的，所以在合并的时候是很快的。
