@@ -71,3 +71,21 @@ private:
 链接：https://leetcode-cn.com/problems/longest-palindromic-substring/solution/tu-jie-ma-la-che-suan-fa-by-wang_ni_ma-if33/
 来源：力扣（LeetCode）
 ```
+## 69求平方数
+>三种方法总结，类似的也可以求立方数
+
+给你一个非负整数 x ，计算并返回 x 的 算术平方根 。
+
+由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
+
+注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
+
+方法一：袖珍计算器算法
+「袖珍计算器算法」是一种用指数函数 \expexp 和对数函数 \lnln 代替平方根函数的方法。我们通过有限的可以使用的数学函数，得到我们想要计算的结果。
+
+我们将 \sqrt{x} 
+x
+​ 写成幂的形式 x^{1/2}x 1/2，再使用自然对数 ee 进行换底，即可得到  
+\sqrt{x} = x^{1/2} = (e ^ {\ln x})^{1/2} = e^{\frac{1}{2} \ln x}
+
+
