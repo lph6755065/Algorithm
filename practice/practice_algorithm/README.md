@@ -611,3 +611,31 @@ int rectCover(int number) {
 >题目描述
 输入一个整数，输出该数32位二进制表示中1的个数。其中负数用补码表示。 
 
+**方法一：bitset的运用** 
+```cpp
+int  NumberOf1(int n) {
+	return bitset<32>(n).count();
+	}
+```
+或者可以直接这样
+```cpp
+int  NumberOf1(int n) {
+
+	bitset<32> bit(n);//将其初始化为 32 位，不足 32 位的前面补齐即可
+	return bit.count();// 返回其中为 1 的个数
+}
+
+```   
+**方法二：官方的做法**
+```cpp
+
+ int NumberOf1(int n) {
+        int count = 0;
+        while(n!= 0){
+            count++;
+            n = n & (n - 1);
+         }
+        return count;
+    }
+
+```
