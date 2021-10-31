@@ -648,22 +648,25 @@ int  NumberOf1(int n) {
 >力扣大牛题解
 
 ```cpp
-class Solution {
-    public double myPow(double x, int n) {
-        if(x == 0) return 0;
-        long b = n;
-        double res = 1.0;
+    double myPow(double x, int n) {
+        if( n == 0) return 1;
+        if( x == 0.0) return 0;
+        long  exp = n;//
         if(n < 0) {
-            b = -b;
-            // b = -n;  这里 -n 的操作是不安全的，如果 n 是 INT_MIN ，那么 -n 会越界，因为 abs(INT_MAX) + 1 = abs(INT_MIN)
+            exp = n* (-1.0);//，当n == INT_MIN时正数时大于INT_MAX的，所以要用一个大于 INT_MAX的类型来保存，同时在将他转正的时候， n*(-1)的结果依然是一个 int，此时的int是个隐藏类型，然后才将这个结果赋值给 exp，所以用来保存结果值的不应该是个int型，我们用double型的 -1 ,这样就可以将相乘的结果值保存为一个 double类型了，然后再进行赋值
+        } 
+        
+        double res = 1.0;
+        while(exp != 0){
+            if( (exp &1) == 1 ){
+                res *=x;
+            }
+            x *=x;
+            exp >>= 1;
         }
-        while(b > 0) {
-            if((b & 1) == 1) res *= x;
-            x *= x;
-            b >>= 1;
-        }
-        if (n < 0) res = 1 / res;
-        return res;
+
+        return n<0 ? 1/res: res;
+
     }
-}
+
 ```
