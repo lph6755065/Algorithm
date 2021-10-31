@@ -639,3 +639,31 @@ int  NumberOf1(int n) {
     }
 
 ```
+### No12、数值的整数次方  
+[数值的整数次方](https://www.nowcoder.com/practice/1a834e5e3e1a4b7ba251417554e07c00?tpId=13&&tqId=11165&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+>题目描述：
+给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+保证base和exponent不同时为0。不得使用库函数，同时不需要考虑大数问题，也不用考虑小数点后面0的位数。
+
+>力扣大牛题解
+
+```cpp
+class Solution {
+    public double myPow(double x, int n) {
+        if(x == 0) return 0;
+        long b = n;
+        double res = 1.0;
+        if(n < 0) {
+            b = -b;
+            // b = -n;  这里 -n 的操作是不安全的，如果 n 是 INT_MIN ，那么 -n 会越界，因为 abs(INT_MAX) + 1 = abs(INT_MIN)
+        }
+        while(b > 0) {
+            if((b & 1) == 1) res *= x;
+            x *= x;
+            b >>= 1;
+        }
+        if (n < 0) res = 1 / res;
+        return res;
+    }
+}
+```
