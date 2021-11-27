@@ -905,3 +905,44 @@ int main(){
 }
 ``` 
 > 参考来源： https://github.com/forthespada/InterviewGuide/blob/main/Doc/Knowledge/%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F.md
+## 三维矩阵化一维的运算
+```cpp
+#include <stdio.h> 
+#include <stdlib.h>
+    int main(void) {
+        int arr1[3][3][3] = {{{1,2,3},{4,5,6}, {7,8,9}},
+            {{10,11,12},{13,14,15}, {16,17,18}},
+           {{19,20,21},{22,23,24}, {25,26,27}}};
+        int arr2[27] = {0}; int row, column,p, i;
+
+        printf("原三维：\n"); for(row = 0; row < 3; row++) {
+            for(column = 0; column < 3; column++) 
+            for(p = 0; p < 3; p++)
+            { printf("%4d", arr1[row][column][p]);
+            }
+            printf("\n");
+        }
+
+        printf("\n 以 行 为 主 ："); for(row = 0; row < 3; row++) {
+            for(column = 0; column < 3; column++)
+             for(p = 0; p < 3; p++)
+             { i =   row * 3*3 +  column*3 + p;
+                arr2[i] = arr1[row][column][p];
+            }
+        }
+        for(i = 0; i < 27; i++) printf("%d ", arr2[i]);
+
+        printf("\n 以 列 为 主 ："); for(row = 0; row < 3; row++) {
+            for(column = 0; column <3; column++)
+            for(p = 0; p < 3; p++){ i = row + column * 3+p*3*3;
+                arr2[i] = arr1[row][column][p];
+            }
+        }
+        for(i = 0; i < 27; i++) printf("%d ", arr2[i]);
+
+
+        printf("\n");
+
+        return 0;
+    }
+```
