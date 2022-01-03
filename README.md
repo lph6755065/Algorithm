@@ -349,27 +349,18 @@ public:
     int midValue(vector<int>&nums , int left, int right)
     {
         
-         if ( left >= right )
-            return -1;
-         int mid = left + ( right - left ) / 2;
-         if ( a [ left ] < a [ right ])
-        {
-             if ( a [ right ] < a [mid])
-                             return right ;
-             else if ( a [ left ] < a [mid])
-                             return mid;
-             else
-                             return left ;
-        }
-         else
-        {
-         if ( a [ left ] < a [mid])
-                         return left ;
-         else if ( a [ right ] < a [mid])
-                         return mid;
-         else
-                         return right ;
-        }
+    if (left >= right) return -1;
+    int mid = left + (right - left) / 2;
+    if (arr[left] < arr[right]) {
+        if (arr[left] > arr[mid]) return left;
+        else if (arr[right] < arr[mid]) return right;
+        else return mid;
+    }
+    else {
+        if (arr[left] < arr[mid]) return left;
+        else if (arr[right] > arr[mid] ) return right;
+        else return mid;
+    }
     }
     void quickSort(vector<int>& nums, int left, int right)
     {
