@@ -671,22 +671,22 @@ void print(vector<int>& nums) {
 }
 
 void mergeSort(vector<int>& data, vector<int>&temp,int begin,int end) {
-	if (begin >= end) return;
+	if (begin >= end) return;      //注意大于等于
 	int low1 = begin, high2 = end, mid = begin + (end - begin) / 2;
 	int high1 = mid, low2 = mid + 1;
 	print(data);
-	mergeSort(temp, data, low1, high1);
+	mergeSort(temp, data, low1, high1);           //注意数组位置
 	mergeSort(temp, data, low2, high2);
 	int index = low1;
 	while (low1 <= high1 && low2 <= high2) {
-		temp[index++] = data[low1] < data[low2] ? data[low1++] : data[low2++];
+		temp[index++] = data[low1] < data[low2] ? data[low1++] : data[low2++];  //注意下标次序
 	}
-	while (low1 <= high1) {
-		temp[index++] = data[low1++];
+	while (low1 <= high1) {                    //注意小于等于
+		temp[index++] = data[low1++];     //注意次序
 	}
 
 	while (low2 <= high2) {
-		temp[index++] = data[low2++];
+		temp[index++] = data[low2++];    //注意次序
 	}
 
 }
