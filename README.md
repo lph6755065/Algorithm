@@ -202,6 +202,28 @@ void selectSort(vector<int>& nums) {
 6.重复步骤2~5
 **代码**
 时间复杂度 on^2 空间 o1，稳定排序，原地排序
+
+比较简单易懂的方式
+```cpp
+void insert(int array[],int size) {
+            int tmp;
+            for(int i=1;i<size;i++){
+                tmp = array[i];  //将当前位置的数给tmp
+                int j = i;
+                for(;j>0&&array[j-1]>tmp;j--){
+                /*
+                往右移，腾出左边的位置,
+                array[j-1]>tmp:大于号是升序排列，小于号是降序排列
+               */
+                array[j] = array[j-1];
+        }
+        //将当前位置的数插入到合适的位置
+        array[j] = tmp;
+        }
+    }
+```
+
+
 ```cpp
 void print(vector<int>& a, int n, int i) {
 	cout << "step"<< i << ": ";
