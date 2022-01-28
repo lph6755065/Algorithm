@@ -1008,7 +1008,7 @@ int main(){
 ```  
 ## 动态规划
 * 0 1 背包问题
-![]()
+![](https://github.com/lph6755065/Algorithm/blob/main/picture/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220129041944.png)
 ```cpp
 #include <cstdio>
 #include <cstdlib>
