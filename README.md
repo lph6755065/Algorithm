@@ -1005,4 +1005,39 @@ int main(){
 
         return 0;
     }
+```  
+## 动态规划
+* 0 1 背包问题
+![]()
+```cpp
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int dp[5][9] = {0};
+int w[5] = {0,2,3,4,5};
+int v[5] = {0,3,4,5,8};
+
+
+int main()
+{
+    int i, j;
+    memset(dp, 0, sizeof(dp));
+    for (int i = 1; i < 5; ++i) {
+        for (int j = 1; j < 9; ++j) {
+            if (w[i] > j) 
+                dp[i][j] = dp[i - 1][j];
+            else 
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w[i]] + v[i]);
+        }
+    }
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            printf("dp[%d][%d] = %d\n", i, j, dp[i][j]);
+        }
+    }
+
+    return 0;
+}
 ```
