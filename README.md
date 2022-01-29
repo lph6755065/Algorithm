@@ -1042,6 +1042,7 @@ int main()
 }
 ```  
 ## 并查集 
+* 是一种数据结构，主要处理不相交集合的合并问题，一些常见问题有联通子图，求最小生成树的Kruskal算法和求最近公共祖先LCA问题。  
 ```cpp
 #include <cstdio>
 #include <cstdlib>
