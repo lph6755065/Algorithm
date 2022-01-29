@@ -1040,4 +1040,87 @@ int main()
 
     return 0;
 }
+```  
+## 并查集 
+```cpp
+#include <cstdio>
+#include <cstdlib>
+using namespace std;
+#define MAXN 20001
+int fa[MAXN];
+void init(int n) {
+    for (int i = 1; i <= n; ++i) {
+        fa[i] = i;
+    }
+}
+int find(int x) {
+    if (x == fa[x])
+        return x;
+    else {
+        fa[x] = find(fa[x]);//父节点设置为根结点
+        return fa[x];       //返回父节点
+    }
+}
+
+void unionn(int i, int j) {
+    int i_fa = find(i);     //找到i的祖先
+    int j_fa = find(j);     //找到j的祖先
+    fa[i_fa] = j_fa;        //谁指向谁都可以
+}
+
+int main()
+{
+    int n,m,x,y,q;
+    scanf("%d",&n);
+    init(n);
+    scanf("%d",&m);
+    for (int i = 1; i <= m; ++i) {
+        scanf("%d%d",&x, &y);
+        unionn(x, y);
+    }
+    scanf("%d",&q);
+    for (int i = 1; i <= q; ++i) {
+        scanf("%d%d",&x, &y);
+        if (find(x) == find(y)) {
+            printf("YES\n");
+        }
+        else{
+            printf("NO\n");
+        }
+    }
+    return 0;
+}
+//输入的数据
+/*
+10 7
+2 4
+5 7
+1 3
+8 9
+1 2
+5 6
+2 3
+3
+3 4
+7 10
+8 9
+*/
+//打印结果
+/*
+10 7
+2 4
+5 7
+1 3
+8 9
+1 2
+5 6
+2 3
+3
+3 4
+YES
+7 10
+NO
+8 9
+YES
+*/
 ```
