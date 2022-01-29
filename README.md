@@ -1124,4 +1124,33 @@ NO
 8 9
 YES
 */
+```  
+## 字符串比较大小 
+```cpp
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+using namespace std;
+
+bool compare(char s1[], char s2[]) {
+    int u = strlen(s1), v = strlen(s2);
+    if (u != v) return u > v;
+    for (int i = 0; i < u; ++i) {
+        if (s1[i] != s2[i]) return s1[i] > s2[i];
+    }
+    return true;
+}
+int main()
+{
+   char s1[] = {"3222"};
+   char s2[] = {"2333"};
+  if(compare(s1, s2)){
+        cout <<"true  s1 > s2";   
+  }
+  else{
+      cout <<"false  s1 < s2";
+  }
+    return 0;
+}
 ```
