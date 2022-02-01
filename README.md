@@ -1240,3 +1240,97 @@ vector<int> dijkstra(vector<vector<int> > G,int source)
     return dis;
 }
 ```
+> 具体题目 
+
+给你n个点，m条无向边，每条边都有长度d和花费p，给你起点s终点t，要求输出起点到终点的最短距离及其花费，如果最短距离有多条路线，则输出花费最少的。
+
+> 输入描述:
+
+输入n,m，点的编号是1~n,然后是m行，每行4个数 a,b,d,p，表示a和b之间有一条边，且其长度为d，花费为p。最后一行是两个数 s,t;起点s，终点t。n和m为0时输入结束。
+(1<n<=1000, 0<m<100000, s != t)
+
+> 输出描述:
+
+输出 一行有两个数， 最短距离及其花费。
+
+> 输入 
+
+```cpp
+3 2
+1 2 5 6
+2 3 4 5
+1 3
+0 0
+```
+> 输出
+
+```cpp
+9 11
+```  
+>C++实现 
+
+```cpp
+#include<iostream>
+#include<vector>
+using namespace std;
+struct E{
+    int next;
+    int len;
+    int cost;
+};
+vector<E>edge[1001];
+int Dis[1001];
+int cost[1001];
+bool mark[1001];
+int main(){
+    int n,m,S,T;
+    while(scanf("%d %d",&n,&m)!=EOF&&n!=0&&m!=0){
+        for(int i=0;i<=n;i++){
+            edge[i].clear();
+        }
+        for(int i=1;i<=m;i++){
+            int a,b,l,c;
+            cin>>a>>b>>l>>c;
+            E tmp;
+            tmp.next=b;
+            tmp.len=l;
+            tmp.cost=c;
+            //注意此处push_back是个函数
+            edge[a].push_back(tmp);
+            tmp.next=a;
+            edge[b].push_back(tmp);
+        }
+        cin>>S>>T;
+        for(int i=1;i<=n;i++){
+            Dis[i]=-1;
+            mark[i]=false;
+        }
+        Dis[S]=0;
+        mark[S]=true;
+        int newP=S;
+        for(int i=1;i<=n;i++){
+            for(int j=0;j<edge[newP].size();j++){
+                int next=edge[newP][j].next;
+                int len=edge[newP][j].len;
+                int Cost=edge[newP][j].cost;
+                if(mark[next]==true)continue;
+                if(Dis[next]==-1||Dis[next]>Dis[newP]+len||Dis[next]==Dis[newP]+len&&cost[next]>cost[newP]+Cost){
+                    Dis[next]=Dis[newP]+len;
+                    cost[next]=cost[newP]+Cost;
+                }
+            }
+            int min=123123123;
+            for(int i=1;i<=n;i++){
+                if(mark[i]==true)continue;
+                if(Dis[i]==-1)continue;
+                if(min>Dis[i]){
+                    min=Dis[i];
+                    newP=i;
+                }
+            }
+            mark[newP]=true;
+        }
+        cout<<Dis[T]<<" "<<cost[T]<<endl;
+    }
+}
+```
