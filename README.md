@@ -1447,7 +1447,6 @@ void displayGrapgAdjList(GraphAdjaList &graphAdjList) {
 **测试结果**  
 ![](https://github.com/lph6755065/Algorithm/blob/main/picture/1643719174(1).jpg)
 
-
 **3.两者区别**  
 对于一个具有n个顶点e条边的无向图  
 它的邻接表表示有n个顶点表结点2e个边表结点  
