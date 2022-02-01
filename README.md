@@ -1270,36 +1270,6 @@ int main() {
 **接着是各函数所在源文件代码：** 
 
 ```cpp
-#include<iostream>
-#include<stdio.h>
-using namespace std;
-#define MAXVERTEX 15
-#define INFINI 65555
-
-struct GraphAdjaMatrix {
-	char vertexes[MAXVERTEX];
-	int edges[MAXVERTEX][MAXVERTEX];
-	int numVertexes;
-	int numEdges;
-};
-
-struct AdjaListNode {
-	int indexOfVertex;
-	int weightOfEdge;
-	AdjaListNode* pt;
-};
-
-struct AdjListHead {
-	char vertex;
-	AdjaListNode* pt;
-};
-
-struct GraphAdjaList {
-	AdjListHead vertexes[MAXVERTEX];
-	int numVertexes;
-	int numEdges;
-};
-
 void createGraphAdjMatrix(GraphAdjaMatrix &graphAdjMatrix,
 	int numVertexes, int numEdges, int edges[][6], char vertexes[]) {
 	graphAdjMatrix.numVertexes = numVertexes;
