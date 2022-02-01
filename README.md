@@ -1155,12 +1155,12 @@ int main()
 }
 ```  
 ## 迪杰斯特拉(Dijkstra)最短路径算法
-### 首先 最短路径算法邻接表和邻接矩阵都可以实现  
+### 最短路径算法邻接表和邻接矩阵都可以实现  
 > 图的邻接矩阵和邻接表的比较
 
 图的存储结构主要分两种，一种是邻接矩阵，一种是邻接表
 
-**1.邻接矩阵**     
+### 1.邻接矩阵    
 图的邻接矩阵存储方式是用两个数组来表示图。一个一维数组存储图中顶点信息，一个二维数组（邻接矩阵）存储图中的边或弧的信息。  
 设图G有n个顶点，则邻接矩阵是一个nn的方阵，定义为：  
 ![](https://github.com/lph6755065/Algorithm/blob/main/picture/a0f48bfe435219810b27e18f38bb2c33.png)  
@@ -1175,7 +1175,7 @@ int main()
 若图G是网图，有n个顶点，则邻接矩阵是一个nn的方阵，定义为：
 ![](https://github.com/lph6755065/Algorithm/blob/main/picture/0b2f32a1dd83d8642de1a879fe2bdbcc.png)
 
-**2 邻接表**    
+### 2 邻接表    
 邻接矩阵是不错的一种图存储结构，但是，对于边数相对顶点较少的图，这种结构存在对存储空间的极大浪费。因此，找到一种数组与链表相结合的存储方法称为邻接表。  
 邻接表的处理方法是这样的：  
 * （1）图中顶点用一个一维数组存储，当然，顶点也可以用单链表来存储，不过，数组可以较容易的读取顶点的信息，更加方便。  
@@ -1186,6 +1186,268 @@ int main()
 对于带权值的网图，可以在边表结点定义中再增加一个weight的数据域，存储权值信息即可。如下图所示。  
 ![](https://github.com/lph6755065/Algorithm/blob/main/picture/23a5281e86ad2de62a3225af0861a32a.png)  
 
+### 代码实现邻接表和邻接矩阵
+* 函数功能如下：  
+  函数createGraphAdjMatrix，由图的所有零碎已知信息建立邻接矩阵。  
+  函数createGraphAdjList，由图的所有零碎已知信息建立邻接表。  
+  函数matrixToList，由邻接矩阵建立邻接表。  
+  函数listToMatrix，由邻接表建立邻接矩阵；其实就是对结构体的各成员赋值。  
+  函数dispalyGraphAdjMatrix，由邻接矩阵输出图的所有信息，以矩阵表示。  
+  函数displayGrapgAdjList，由邻接表输出图的所有信息，以线性表表示。这两个输出的目的也是为了检测图的结构体变量建立是否准确。  
+  完整代码如下，先是main函数所在文件代码：  
+```cpp
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+#define MAXVERTEX 15
+#define INFINI 65555
+
+struct GraphAdjaMatrix {
+	char vertexes[MAXVERTEX];
+	int edges[MAXVERTEX][MAXVERTEX];
+	int numVertexes;
+	int numEdges;
+};
+
+struct AdjaListNode {
+	int indexOfVertex;
+	int weightOfEdge;
+	AdjaListNode* pt;
+};
+
+struct AdjListHead {
+	char vertex;
+	AdjaListNode* pt;
+};
+
+struct GraphAdjaList {
+	AdjListHead vertexes[MAXVERTEX];
+	int numVertexes;
+	int numEdges;
+};
+
+extern void createGraphAdjMatrix(GraphAdjaMatrix &graphAdjMatrix,
+			int numVertexes,int numEdges,int edges[][6],char vertexes[]);
+extern void createGraphAdjList(GraphAdjaList &graphAdjList,
+			int numVertexes, int numEdges, int edges[][6], char vertexes[]);
+extern void matrixToList(GraphAdjaMatrix &graphAdjMatrix, 
+			GraphAdjaList &graphAdjList);
+extern void listToMatrix(GraphAdjaList &graphAdjList,
+	GraphAdjaMatrix &graphAdjMatrix);
+extern void dispalyGraphAdjMatrix(GraphAdjaMatrix &graphAdjMatrix);
+extern void displayGrapgAdjList(GraphAdjaList &graphAdjList);
+
+
+int main() {
+	GraphAdjaMatrix graphAdjMatrix ;
+	GraphAdjaList graphAdjList;
+	int numVertexes = 6, numEdges = 10;
+	int edges[][6] = {	{0,5,INFINI,7,INFINI,INFINI},
+						{INFINI,0,4,INFINI,INFINI,INFINI},
+						{8,INFINI,0,INFINI,INFINI,9},
+						{INFINI,INFINI,5,0,INFINI,6},
+						{INFINI,INFINI,INFINI,5,0,INFINI},
+						{3,INFINI,INFINI,INFINI,1,0} };
+	char vertexes[] = {'a','b','c','d','e','f'};
+
+	createGraphAdjMatrix(graphAdjMatrix,numVertexes,numEdges,edges,vertexes);
+	createGraphAdjList(graphAdjList,numVertexes,numEdges,edges,vertexes);
+
+	GraphAdjaMatrix graphAdjMatrixNew;
+	GraphAdjaList graphAdjListNew;
+
+	matrixToList(graphAdjMatrix,graphAdjListNew);
+	listToMatrix(graphAdjList,graphAdjMatrixNew);
+
+	dispalyGraphAdjMatrix(graphAdjMatrixNew);
+	cout << endl;
+	displayGrapgAdjList(graphAdjListNew);
+
+	return 0;
+}
+
+```  
+**接着是各函数所在源文件代码：** 
+
+```cpp
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+#define MAXVERTEX 15
+#define INFINI 65555
+
+struct GraphAdjaMatrix {
+	char vertexes[MAXVERTEX];
+	int edges[MAXVERTEX][MAXVERTEX];
+	int numVertexes;
+	int numEdges;
+};
+
+struct AdjaListNode {
+	int indexOfVertex;
+	int weightOfEdge;
+	AdjaListNode* pt;
+};
+
+struct AdjListHead {
+	char vertex;
+	AdjaListNode* pt;
+};
+
+struct GraphAdjaList {
+	AdjListHead vertexes[MAXVERTEX];
+	int numVertexes;
+	int numEdges;
+};
+
+void createGraphAdjMatrix(GraphAdjaMatrix &graphAdjMatrix,
+	int numVertexes, int numEdges, int edges[][6], char vertexes[]) {
+	graphAdjMatrix.numVertexes = numVertexes;
+	graphAdjMatrix.numEdges = numEdges;
+	
+	for (int i = 0; i < numVertexes; i++)
+		graphAdjMatrix.vertexes[i] = vertexes[i];
+
+	for (int row = 0; row < numVertexes; row++)
+		for (int column = 0; column < numVertexes; column++)
+			graphAdjMatrix.edges[row][column] = edges[row][column];
+}
+
+void createGraphAdjList(GraphAdjaList &graphAdjList,
+	int numVertexes, int numEdges, int edges[][6], char vertexes[]){
+	graphAdjList.numEdges = numEdges;
+	graphAdjList.numVertexes = numVertexes;
+
+	for (int i = 0; i < MAXVERTEX; i++)
+		graphAdjList.vertexes[i].pt = NULL;
+
+	for (int i = 0; i < numVertexes; i++)
+		graphAdjList.vertexes[i].vertex = vertexes[i];
+
+	AdjaListNode* ptTail = NULL,*ptNew;
+	int i, j;
+	for ( i = 0; i < numVertexes; i++) 
+		for (j = 0; j < numVertexes; j++) 
+			if (edges[i][j] != 0 && edges[i][j] != INFINI) {
+				ptNew = new AdjaListNode;
+
+				ptNew->indexOfVertex = j;
+				ptNew->weightOfEdge = edges[i][j];
+			
+				if (graphAdjList.vertexes[i].pt == NULL) {
+					ptNew->pt = NULL;
+					graphAdjList.vertexes[i].pt = ptNew;
+					ptTail = ptNew;
+				}
+				else {
+					ptNew->pt = ptTail->pt;
+					ptTail->pt = ptNew;
+					ptTail = ptNew;
+				}
+			}
+}
+
+void matrixToList(GraphAdjaMatrix &graphAdjMatrix,
+		GraphAdjaList &graphAdjList) {
+	graphAdjList.numEdges = graphAdjMatrix.numEdges;
+	graphAdjList.numVertexes = graphAdjMatrix.numVertexes;
+
+	for (int i = 0; i < MAXVERTEX; i++)
+		graphAdjList.vertexes[i].pt = NULL;
+
+	for (int i = 0; i < graphAdjList.numVertexes; i++)
+		graphAdjList.vertexes[i].vertex = graphAdjMatrix.vertexes[i];
+
+	AdjaListNode* ptTail = NULL, * ptNew;
+	int i, j;
+	for (i = 0; i < graphAdjList.numVertexes; i++)
+		for (j = 0; j < graphAdjList.numVertexes; j++)
+			if (graphAdjMatrix.edges[i][j] != 0 && 
+				graphAdjMatrix.edges[i][j] != INFINI) {
+				ptNew = new AdjaListNode;
+
+				ptNew->indexOfVertex = j;
+				ptNew->weightOfEdge = graphAdjMatrix.edges[i][j];
+
+				if (graphAdjList.vertexes[i].pt == NULL) {
+					ptNew->pt = NULL;
+					graphAdjList.vertexes[i].pt = ptNew;
+					ptTail = ptNew;
+				}
+				else {
+					ptNew->pt = ptTail->pt;
+					ptTail->pt = ptNew;
+					ptTail = ptNew;
+				}
+			}
+}
+
+void listToMatrix(GraphAdjaList &graphAdjList,
+	GraphAdjaMatrix &graphAdjMatrix) {
+	graphAdjMatrix.numEdges = graphAdjList.numEdges;
+	graphAdjMatrix.numVertexes = graphAdjList.numVertexes;
+
+	for (int i = 0; i < graphAdjMatrix.numVertexes; i++)
+		graphAdjMatrix.vertexes[i] = graphAdjList.vertexes[i].vertex;
+
+	int row, column;
+	//对邻接矩阵的初始化，主对角线为0，其余统统为无穷大
+	for(row = 0 ; row < graphAdjMatrix.numVertexes ; row++)
+		for(column = 0 ; column < graphAdjMatrix.numVertexes ; column++)
+			if (row == column) 
+				graphAdjMatrix.edges[row][column] = 0 ;
+			else
+				graphAdjMatrix.edges[row][column] = INFINI;
+	
+	AdjaListNode* pt;
+	for (row = 0; row < graphAdjMatrix.numVertexes; row++) {
+		pt = graphAdjList.vertexes[row].pt;
+		while (pt != NULL) {
+			column = pt->indexOfVertex;
+			graphAdjMatrix.edges[row][column] = pt->weightOfEdge;
+			pt = pt->pt;
+		}
+	}
+}
+
+void dispalyGraphAdjMatrix(GraphAdjaMatrix &graphAdjMatrix) {
+	cout << "adjacensy matrix :" << endl;
+	int row,column;
+	printf("%3c",' ');
+	for (row = 0; row < graphAdjMatrix.numVertexes; row++)
+		printf("%3c",graphAdjMatrix.vertexes[row]);
+	printf("\n");
+	for (row = 0; row < graphAdjMatrix.numVertexes; row++) {
+		printf("%-3c", graphAdjMatrix.vertexes[row]);
+		for (column = 0; column < graphAdjMatrix.numVertexes; column++)
+			if (graphAdjMatrix.edges[row][column] == INFINI)
+				printf("%3s", "∞");
+			else
+				printf("%3d",graphAdjMatrix.edges[row][column]);
+		cout << endl;
+	}
+}
+
+void displayGrapgAdjList(GraphAdjaList &graphAdjList) {
+	cout << "graph adjacency list :" << endl;
+	AdjaListNode* pt;
+	for (int i = 0; i < graphAdjList.numVertexes; i++) {
+		printf("%2c:",graphAdjList.vertexes[i].vertex);
+		pt = graphAdjList.vertexes[i].pt;
+		while (pt != NULL) {
+			printf("%5d(%d)",pt->indexOfVertex,pt->weightOfEdge);
+			pt = pt->pt;
+		}
+		cout << endl;
+	}
+}
+
+```  
+
+**测试结果**  
+![](https://github.com/lph6755065/Algorithm/blob/main/picture/1643719174(1).jpg)
+
+
 **3.两者区别**  
 对于一个具有n个顶点e条边的无向图  
 它的邻接表表示有n个顶点表结点2e个边表结点  
@@ -1194,7 +1456,7 @@ int main()
 如果图中边的数目远远小于n^2称作稀疏图，这是用邻接表表示比用邻接矩阵表示节省空间;  
 如果图中边的数目接近于n^2,对于无向图接近于n*(n-1)称作稠密图,考虑到邻接表中要附加链域，采用邻接矩阵表示法为宜。  
 
-> 算法介绍
+> 单源最短路径算法介绍
 * 迪杰斯特拉算法是由荷兰计算机科学家在1956年发现的算法，此算法使用类似广度优先搜索的方法解决了带权图的单源最短路径问题。它是一个贪心算法。  
 > 算法思想
 * 1. 选定一个点，这个点满足两个条件：1.未被选过，2.距离最短
