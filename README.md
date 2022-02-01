@@ -1162,6 +1162,17 @@ int main()
 * 2. 对于这个点的所有邻近点去尝试松弛
 > 算法步骤  
 
+Dijkstra算法的基本步骤：
+1、初始化顶点信息；v.known = flase; v.dist = INFINITY; v.path = 0;
+2、对起点s的dist字段设为0;s.dist = 0;
+3、从所有顶点中找到dist最小的并且known为false的顶点v。然后将该顶点v的known置为true;
+然后更新与顶点v相邻的所有其它known为false的顶点w的dist和path的值。
+如果v.dist+distance(v,w) < w.dist;则更新w.dist = v.dist + distance(v, w);w.path=v;
+4、循环执行第3步，直到从所有顶点中找不到known为false的顶点v为止，找不到合适的顶点的时候则退出算法。
+
+
+>具体过程
+
 ![](https://github.com/lph6755065/Algorithm/blob/main/picture/20201128093946374.gif)  
 
 首先，可以设置两个集合分别是A和B，A用来存放已经求出最短路径的点，B用来存放还未计算出最短路径的点   
