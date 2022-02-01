@@ -1182,6 +1182,7 @@ int main()
 2.只能解决单源最短路径问题
 
 > 核心代码 
+
 ![](https://github.com/lph6755065/Algorithm/blob/main/picture/20201129151351236.png)
 以此图为例，写一段测试代码。使用邻接矩阵来存储图结构，100代表两点之间没有通路，看成无穷，也可以使用比图中距离大的任何一个数。如下图
 ![](https://github.com/lph6755065/Algorithm/blob/main/picture/20201129153821611.png) 
