@@ -1162,7 +1162,7 @@ int main()
 * 2. 对于这个点的所有邻近点去尝试松弛
 > 算法步骤  
 
-Dijkstra算法的基本步骤：
+Dijkstra算法的基本步骤：  
 1、初始化顶点信息；v.known = flase; v.dist = INFINITY; v.path = 0;  
 2、对起点s的dist字段设为0;s.dist = 0;  
 3、从所有顶点中找到dist最小的并且known为false的顶点v。然后将该顶点v的known置为true;  
