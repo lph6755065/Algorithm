@@ -1041,6 +1041,25 @@ int main()
     return 0;
 }
 ```  
+* 完全背包  物品可以放回
+```cpp
+// 先遍历物品，在遍历背包
+void test_CompletePack() {
+    vector<int> weight = {1, 3, 4};
+    vector<int> value = {15, 20, 30};
+    int bagWeight = 4;
+    vector<int> dp(bagWeight + 1, 0);
+    for(int i = 0; i < weight.size(); i++) { // 遍历物品
+        for(int j = weight[i]; j <= bagWeight; j++) { // 遍历背包容量
+            dp[j] = max(dp[j], dp[j - weight[i]] + value[i]);
+        }
+    }
+    cout << dp[bagWeight] << endl;
+}
+int main() {
+    test_CompletePack();
+}
+```
 ## 并查集 
 * 是一种数据结构，主要处理不相交集合的合并问题，一些常见问题有联通子图，求最小生成树的Kruskal算法和求最近公共祖先LCA问题。  
 ```cpp
