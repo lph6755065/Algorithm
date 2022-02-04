@@ -152,6 +152,8 @@ public:
 > 这种题目一定要注意边界和特殊点检验。
 
 **一和零 474**  
+> 解法：动态规划
+
 ```cpp
 class Solution {
 public:
