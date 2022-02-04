@@ -1059,6 +1059,40 @@ void test_CompletePack() {
 int main() {
     test_CompletePack();
 }
+```  
+**零钱兑换2  518**  
+> 这个题是求组合问题  
+* 所以先遍历物品，后遍历背包的顺序不能乱
+```cpp
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        vector<int> dp(amount + 1, 0);
+        dp[0] = 1;
+        for (int i = 0; i < coins.size(); i++) { // 遍历物品
+            for (int j = coins[i]; j <= amount; j++) { // 遍历背包
+                dp[j] += dp[j - coins[i]];
+            }
+        }
+        return dp[amount];
+    }
+};
+```
+>如果求排列问题 那么必须先遍历背包，后遍历物品
+```cpp
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        vector<int> dp(amount + 1, 0);
+        dp[0] = 1;
+        for (int j = 0; j <= amount; j++) { // 遍历背包容量
+    	for (int i = 0; i < coins.size(); i++) { // 遍历物品
+        	if (j - coins[i] >= 0) dp[j] += dp[j - coins[i]];
+   	 }
+}
+        return dp[amount];
+    }
+};
 ```
 ## 并查集 
 * 是一种数据结构，主要处理不相交集合的合并问题，一些常见问题有联通子图，求最小生成树的Kruskal算法和求最近公共祖先LCA问题。  
