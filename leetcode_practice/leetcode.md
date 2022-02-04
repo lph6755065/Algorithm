@@ -151,7 +151,30 @@ public:
 ```  
 > 这种题目一定要注意边界和特殊点检验。
 
+**一和零 474**  
+```cpp
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+        for (string str: strs) {
+            int oneNum = 0, zeroNum = 0;
+            for (char c : str) {
+                if ( c == '0') zeroNum++;
+                else oneNum++;
+            }
+            for (int i = m; i >= zeroNum; --i) {   //注意循环是在字符串循环内部的
+                for (int j = n; j >= oneNum; --j) {
+                    dp[i][j] = max(dp[i][j], dp[i - zeroNum][j - oneNum] + 1);
+                }
+            }
+        }
+        return dp[m][n];
 
+        
+    }
+};
+```
 
 
 
