@@ -1116,6 +1116,43 @@ public:
 ```
 
 每一阶可以重复使用，例如跳了1阶，还可以继续跳1阶。
+
+**多重背包**
+>多重背包和01背包是非常像的， 为什么和01背包像呢？
+每件物品最多有Mi件可用，把Mi件摊开，其实就是一个01背包问题了。
+
+```cpp
+void test_multi_pack() {
+    vector<int> weight = {1, 3, 4};
+    vector<int> value = {15, 20, 30};
+    vector<int> nums = {2, 3, 2};
+    int bagWeight = 10;
+    for (int i = 0; i < nums.size(); i++) {
+        while (nums[i] > 1) { // nums[i]保留到1，把其他物品都展开
+            weight.push_back(weight[i]);
+            value.push_back(value[i]);
+            nums[i]--;
+        }
+    }
+
+    vector<int> dp(bagWeight + 1, 0);
+    for(int i = 0; i < weight.size(); i++) { // 遍历物品
+        for(int j = bagWeight; j >= weight[i]; j--) { // 遍历背包容量
+            dp[j] = max(dp[j], dp[j - weight[i]] + value[i]);
+        }
+        for (int j = 0; j <= bagWeight; j++) {
+            cout << dp[j] << " ";
+        }
+        cout << endl;
+    }
+    cout << dp[bagWeight] << endl;
+
+}
+int main() {
+    test_multi_pack();
+}
+```
+
 ## 并查集 
 * 是一种数据结构，主要处理不相交集合的合并问题，一些常见问题有联通子图，求最小生成树的Kruskal算法和求最近公共祖先LCA问题。  
 ```cpp
