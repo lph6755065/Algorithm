@@ -127,6 +127,36 @@ public:
 * 牛顿迭代法的本质是借助泰勒级数，从初始值开始快速向零点逼近。我们任取一个 x_0作为初始值，在每一步的迭代中，我们找到函数图像上的点 (x_i, f(x_i))，过该点作一条斜率为该点导数 f'(x_i)的直线，与横轴的交点记为 x_{i+1}， x_{i+1}x 相较于 x_i而言距离零点更近。在经过多次迭代后，我们就可以得到一个距离零点非常接近的交点。
 [](https://github.com/lph6755065/Algorithm/blob/main/leetcode_practice/picture/1634113249(1).jpg)
 
+do while的做法  
+```cpp
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{   // 用迭代法求x=a1/2的近似值，
+    // 要求前后两个迭代根之差小于10-5。求平方根的迭代公式为：xn+1 = (xn+a/xn)/2
+   float x0,x1,a;
+   int step = 0;
+   cout << "input a positive value: " <<endl;
+   cin >> a;
+   if (a < 0) cout << "cant openning root"<<endl;
+   else{
+       x1 = a / 2;
+       do{
+           x0 = x1;
+           x1 = (x0 + a / x0) / 2;
+           step++;
+       }while(fabs(x1 - x0) >= 1e-5);
+       cout <<"square root of "<< a <<" is: " << x1 << endl;
+       cout <<"the step is: " << step;
+   }
+    return 0;
+}
+//时间复杂度：O(logx)
+//空间复杂度：O(1)
+```
+while的做法  
 ```cpp
 class Solution {
 public:
