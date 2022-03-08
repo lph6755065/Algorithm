@@ -1754,3 +1754,47 @@ int main(){
     }
 }
 ```
+### 输入n求出k个分区部分
+>例如：
+>输入4 2
+>输出2 其中2的组合为1+3, 2+2
+
+```cpp
+#include <iostream>
+long long partition(int, int);
+using namespace std;
+int main()
+{
+    int n, k;
+    cin >> n >> k;
+    cout << partition(n, k);
+
+    return 0;
+}
+
+long long partition(int n, int k) {
+    long long ***A = new long long**[n+1];
+    for (int i = 0; i <= n; ++i) {
+        A[i] = new long long*[k+1];
+        for (int j = 0; j <= k; ++j) {
+            A[i][j] = new long long[n+1];
+        }
+    }
+    for (int i = 0; i <= n; ++i) {
+        for (int j = 0; j <= k; ++j) {
+            for (int t = 0; t <= n; ++t) {
+                if (i == 0 && j == 0) {
+                    A[i][j][t] = 1;
+                } else if (t > i) {
+                    A[i][j][t] = A[i][j][i];
+                } else if (j > 0 && j <= i && 0 < t && t <= i) {
+                    A[i][j][t] = A[i][j][t - 1] + A[i - t][j - 1][t];
+                } else {
+                    A[i][j][t] = 0;
+                }
+            }
+        }
+    }
+    return A[n][k][n];
+}
+```
